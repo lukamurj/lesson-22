@@ -1,0 +1,28 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+td {
+  width: 100px;
+  height: 100px;
+}
+
+table,
+tr,
+td {
+  border: 0.5px solid black;
+  border-collapse: collapse;
+}
+
+table {
+  margin: auto;
+}
+
+button {
+  width: 100px;
+  height: 50px;
+  margin-left: 50%;
+  margin-top: 20px;
+  transform: translate(-50px, 0);
+}

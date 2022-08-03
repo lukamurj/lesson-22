@@ -79,5 +79,92 @@ function yellowBlocks() {
         myNum++;
       }
     }
-  }, "1000");
+  }, "500");
+  addEventListenersToBlocks();
+}
+
+function addEventListenersToBlocks() {
+  for (let i = 0; i < myBlocks.length; i++) {
+    myBlocks[i].addEventListener("click", messengerFunciton);
+  }
+}
+
+function messengerFunciton() {
+  rightOrWrongBlock(this);
+}
+
+function rightOrWrongBlock(block) {
+  let i = 0;
+  for (let a = 0; a < myBlocks.length; a++) {
+    if (block === myBlocks[a]) {
+      i = a;
+    }
+  }
+
+  console.log(i, block);
+  if (i < 5) {
+    if (myArr[0][i] === 1) {
+      block.style.backgroundColor = "green";
+    } else {
+      block.style.backgroundColor = "red";
+      userLost();
+    }
+  } else if (i >= 5 && i < 10) {
+    i -= 5;
+    if (myArr[1][i] === 1) {
+      block.style.backgroundColor = "green";
+    } else {
+      block.style.backgroundColor = "red";
+      userLost();
+    }
+  } else if (i >= 10 && i < 15) {
+    i -= 10;
+    if (myArr[2][i] === 1) {
+      block.style.backgroundColor = "green";
+    } else {
+      block.style.backgroundColor = "red";
+      userLost();
+    }
+  } else if (i >= 15 && i < 20) {
+    i -= 15;
+    if (myArr[3][i] === 1) {
+      block.style.backgroundColor = "green";
+    } else {
+      block.style.backgroundColor = "red";
+      userLost();
+    }
+  } else {
+    i -= 20;
+    if (myArr[4][i] === 1) {
+      block.style.backgroundColor = "green";
+    } else {
+      block.style.backgroundColor = "red";
+      userLost();
+    }
+  }
+}
+
+function userLost() {
+  removeEventListenersToBlocks();
+
+  for (let i = 0; i < myArr.length; i++) {
+    for (let a = 0; a < myArr[i].length; a++) {
+      if (
+        myArr[i][a] === 1 &&
+        myBlocks[i * 5 + a].style.backgroundColor !== "green"
+      ) {
+        let rightBlockNum = i * 5 + a;
+        myBlocks[rightBlockNum].style.backgroundColor = "yellow";
+      }
+    }
+  }
+
+  let div = document.createElement("div");
+  div.innerHTML = "GAME OVER";
+}
+
+function removeEventListenersToBlocks() {
+  for (let i = 0; i < myBlocks.length; i++) {
+    myBlocks[i].removeEventListener("click", messengerFunciton);
+  }
 }

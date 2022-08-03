@@ -23,6 +23,11 @@ for (let i = 0; i < myArr.length; i++) {
 
 myBtn.innerHTML = "START";
 
+let div = document.createElement("div");
+div.innerHTML = "GAME OVER";
+mySection.appendChild(div);
+div.classList.toggle("hidden");
+
 myTable.innerHTML = divOfBlocks;
 mySection.appendChild(myTable);
 mySection.appendChild(myBtn);
@@ -31,25 +36,46 @@ const myArrCount = myArr.reduce(
   0
 );
 
-let myBlocks = document.getElementsByTagName("td");
+let myBlocks = document.getElementsByTagName("td"),
+  greenBlocks = 0;
 
 function randomNumGen() {
   for (let i = 0; i < 3; i++) {
     let randomNum = Math.floor(Math.random() * myArrCount);
     if (randomNum < 5) {
-      myArr[0][randomNum] = 1;
+      if (myArr[0][randomNum] !== 1) {
+        myArr[0][randomNum] = 1;
+      } else {
+        i--;
+      }
     } else if (randomNum >= 5 && randomNum < 10) {
       randomNum -= 5;
-      myArr[1][randomNum] = 1;
+      if (myArr[1][randomNum] !== 1) {
+        myArr[1][randomNum] = 1;
+      } else {
+        i--;
+      }
     } else if (randomNum >= 10 && randomNum < 15) {
       randomNum -= 10;
-      myArr[2][randomNum] = 1;
+      if (myArr[2][randomNum] !== 1) {
+        myArr[2][randomNum] = 1;
+      } else {
+        i--;
+      }
     } else if (randomNum >= 15 && randomNum < 20) {
       randomNum -= 15;
-      myArr[3][randomNum] = 1;
+      if (myArr[3][randomNum] !== 1) {
+        myArr[3][randomNum] = 1;
+      } else {
+        i--;
+      }
     } else {
       randomNum -= 20;
-      myArr[4][randomNum] = 1;
+      if (myArr[4][randomNum] !== 1) {
+        myArr[4][randomNum] = 1;
+      } else {
+        i--;
+      }
     }
   }
   yellowBlocks();
@@ -79,8 +105,8 @@ function yellowBlocks() {
         myNum++;
       }
     }
-  }, "500");
-  addEventListenersToBlocks();
+    addEventListenersToBlocks();
+  }, "1000");
 }
 
 function addEventListenersToBlocks() {
@@ -101,10 +127,11 @@ function rightOrWrongBlock(block) {
     }
   }
 
-  console.log(i, block);
   if (i < 5) {
     if (myArr[0][i] === 1) {
       block.style.backgroundColor = "green";
+      greenBlocks++;
+      myBlocks[i].removeEventListener("click", messengerFunciton);
     } else {
       block.style.backgroundColor = "red";
       userLost();
@@ -113,6 +140,8 @@ function rightOrWrongBlock(block) {
     i -= 5;
     if (myArr[1][i] === 1) {
       block.style.backgroundColor = "green";
+      greenBlocks++;
+      myBlocks[5 + i].removeEventListener("click", messengerFunciton);
     } else {
       block.style.backgroundColor = "red";
       userLost();
@@ -121,6 +150,8 @@ function rightOrWrongBlock(block) {
     i -= 10;
     if (myArr[2][i] === 1) {
       block.style.backgroundColor = "green";
+      greenBlocks++;
+      myBlocks[10 + i].removeEventListener("click", messengerFunciton);
     } else {
       block.style.backgroundColor = "red";
       userLost();
@@ -129,6 +160,8 @@ function rightOrWrongBlock(block) {
     i -= 15;
     if (myArr[3][i] === 1) {
       block.style.backgroundColor = "green";
+      greenBlocks++;
+      myBlocks[15 + i].removeEventListener("click", messengerFunciton);
     } else {
       block.style.backgroundColor = "red";
       userLost();
@@ -137,16 +170,23 @@ function rightOrWrongBlock(block) {
     i -= 20;
     if (myArr[4][i] === 1) {
       block.style.backgroundColor = "green";
+      greenBlocks++;
+      myBlocks[20 + i].removeEventListener("click", messengerFunciton);
     } else {
       block.style.backgroundColor = "red";
       userLost();
     }
   }
+
+  if (greenBlocks === 3) {
+    goingBackToBeggining();
+    randomNumGen();
+  }
 }
 
 function userLost() {
   removeEventListenersToBlocks();
-
+  greenBlocks = 0;
   for (let i = 0; i < myArr.length; i++) {
     for (let a = 0; a < myArr[i].length; a++) {
       if (
@@ -159,12 +199,29 @@ function userLost() {
     }
   }
 
-  let div = document.createElement("div");
-  div.innerHTML = "GAME OVER";
+  div.classList.toggle("hidden");
+
+  setTimeout(() => {
+    div.classList.toggle("hidden");
+    myBtn.addEventListener("click", randomNumGen);
+    goingBackToBeggining();
+  }, "2000");
 }
 
 function removeEventListenersToBlocks() {
   for (let i = 0; i < myBlocks.length; i++) {
     myBlocks[i].removeEventListener("click", messengerFunciton);
+  }
+}
+
+function goingBackToBeggining() {
+  greenBlocks = 0;
+  myNum = 0;
+  for (let i = 0; i < myArr.length; i++) {
+    for (let a = 0; a < myArr[i].length; a++) {
+      myArr[i][a] = 0;
+      myBlocks[myNum].style.backgroundColor = "white";
+      myNum++;
+    }
   }
 }
